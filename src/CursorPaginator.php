@@ -2,16 +2,16 @@
 
 namespace Juampi92\CursorPagination;
 
-use Countable;
 use ArrayAccess;
+use Countable;
+use Illuminate\Contracts\Pagination\Paginator as PaginatorContract;
+use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\AbstractPaginator;
-use JsonSerializable;
-use IteratorAggregate;
 use Illuminate\Support\Collection;
-use Illuminate\Contracts\Support\Jsonable;
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Contracts\Pagination\Paginator as PaginatorContract;
+use IteratorAggregate;
+use JsonSerializable;
 
 class CursorPaginator extends AbstractPaginator implements Arrayable, ArrayAccess, Countable, IteratorAggregate, JsonSerializable, Jsonable, PaginatorContract
 {
@@ -41,8 +41,8 @@ class CursorPaginator extends AbstractPaginator implements Arrayable, ArrayAcces
     /**
      * Create a new paginator instance.
      *
-     * @param  mixed $items
-     * @param  int $perPage
+     * @param mixed $items
+     * @param int   $perPage
      * @param array $options
      */
     public function __construct($items, $perPage, array $options = [])
@@ -102,14 +102,16 @@ class CursorPaginator extends AbstractPaginator implements Arrayable, ArrayAcces
      */
     public static function cursorQueryNames()
     {
-        if (isset(static::$queue_names_cache)) return static::$queue_names_cache;
+        if (isset(static::$queue_names_cache)) {
+            return static::$queue_names_cache;
+        }
 
         $ident = config('cursor_pagination.identifier_name');
         list($prev, $next) = config('cursor_pagination.navigation_names');
 
         static::$queue_names_cache = [
             "{$prev}_{$ident}",
-            "{$next}_{$ident}"
+            "{$next}_{$ident}",
         ];
 
         return static::$queue_names_cache;
@@ -131,7 +133,7 @@ class CursorPaginator extends AbstractPaginator implements Arrayable, ArrayAcces
 
         if ($this->nextCursor()) {
             $query = [
-                $next => $this->nextCursor()
+                $next => $this->nextCursor(),
             ];
 
             if ($this->cursor->isPrev()) {
@@ -140,8 +142,6 @@ class CursorPaginator extends AbstractPaginator implements Arrayable, ArrayAcces
 
             return $this->url($query);
         }
-
-        return null;
     }
 
     /**
@@ -149,13 +149,11 @@ class CursorPaginator extends AbstractPaginator implements Arrayable, ArrayAcces
      */
     public function prevCursor()
     {
-        if (!$this->isFirstPage()) {
-            return null;
+        if ($this->isFirstPage()) {
+            return ($this->cursor->isPrev() && $this->isEmpty()) ?
+                $this->cursor->getPrevCursor() :
+                $this->firstItem();
         }
-
-        return (($this->cursor->isPrev() && $this->isEmpty()) ?
-            $this->cursor->getPrevCursor() :
-            $this->firstItem());
     }
 
     /**
@@ -167,15 +165,13 @@ class CursorPaginator extends AbstractPaginator implements Arrayable, ArrayAcces
 
         if ($pre_cursor = $this->prevCursor()) {
             return $this->url([
-                $prev => $pre_cursor
+                $prev => $pre_cursor,
             ]);
         }
-
-        return null;
     }
 
     /**
-     * Returns the request query without the cursor parameters
+     * Returns the request query without the cursor parameters.
      *
      * @return array
      */
@@ -186,7 +182,7 @@ class CursorPaginator extends AbstractPaginator implements Arrayable, ArrayAcces
         return collect($this->request->query())
             ->diffKeys([
                 $prev => true,
-                $next => true
+                $next => true,
             ])->all();
     }
 
@@ -200,8 +196,8 @@ class CursorPaginator extends AbstractPaginator implements Arrayable, ArrayAcces
         $query = array_merge($this->query, $cursor);
 
         return $this->path
-            . (str_contains($this->path, '?') ? '&' : '?')
-            . http_build_query($query, '', '&');
+            .(str_contains($this->path, '?') ? '&' : '?')
+            .http_build_query($query, '', '&');
     }
 
     /**
@@ -223,7 +219,7 @@ class CursorPaginator extends AbstractPaginator implements Arrayable, ArrayAcces
     }
 
     /**
-     * Return the first identifier of the results
+     * Return the first identifier of the results.
      *
      * @return mixed
      */
@@ -233,7 +229,8 @@ class CursorPaginator extends AbstractPaginator implements Arrayable, ArrayAcces
     }
 
     /**
-     * Return the last identifier of the results
+     * Return the last identifier of the results.
+     *
      * @return mixed
      */
     public function lastItem()
@@ -245,7 +242,7 @@ class CursorPaginator extends AbstractPaginator implements Arrayable, ArrayAcces
      * Render the paginator using a given view.
      *
      * @param  string|null $view
-     * @param  array $data
+     * @param  array       $data
      *
      * @return string
      */
@@ -269,9 +266,9 @@ class CursorPaginator extends AbstractPaginator implements Arrayable, ArrayAcces
             'path'          => $this->url(),
             $prev           => self::castCursor($this->prevCursor()),
             $next           => self::castCursor($this->nextCursor()),
-            'per_page'      => (int)$this->perPage(),
+            'per_page'      => (int) $this->perPage(),
             'next_page_url' => $this->nextPageUrl(),
-            'prev_page_url' => $this->previousPageUrl()
+            'prev_page_url' => $this->previousPageUrl(),
         ];
     }
 
@@ -288,7 +285,7 @@ class CursorPaginator extends AbstractPaginator implements Arrayable, ArrayAcces
     /**
      * Convert the object to its JSON representation.
      *
-     * @param  int $options
+     * @param int $options
      *
      * @return string
      */
@@ -305,10 +302,9 @@ class CursorPaginator extends AbstractPaginator implements Arrayable, ArrayAcces
     protected static function castCursor($val = null)
     {
         if (is_null($val)) {
-            return null;
+            return $val;
         }
 
-        return (string)$val;
-
+        return (string) $val;
     }
 }

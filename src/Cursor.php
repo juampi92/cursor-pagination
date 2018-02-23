@@ -2,7 +2,6 @@
 
 namespace Juampi92\CursorPagination;
 
-
 class Cursor
 {
     protected $prev = null;
@@ -14,7 +13,7 @@ class Cursor
      * @param null $prev
      * @param null $next
      */
-    function __construct($prev = null, $next = null)
+    public function __construct($prev = null, $next = null)
     {
         $this->prev = $prev;
         $this->next = $next;
@@ -25,7 +24,7 @@ class Cursor
      */
     public function isPresent()
     {
-        return ($this->isNext() || $this->isPrev());
+        return $this->isNext() || $this->isPrev();
     }
 
     /**

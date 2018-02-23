@@ -30,16 +30,16 @@ class RequestTest extends ModelsTestCase
             'first' => null,
             'last'  => null,
             'prev'  => "test/resource?$prev_name=$prev_cur",
-            'next'  => "test/resource?$next_name=$next_cur"
+            'next'  => "test/resource?$next_name=$next_cur",
         ]]);
 
         $response->assertJsonFragment([
             "meta" => [
-                "path" => "test/resource?",
-                "next_cursor"     => (string)$next_cur,
+                "path"            => "test/resource?",
+                "next_cursor"     => (string) $next_cur,
                 "per_page"        => 5,
-                "previous_cursor" => (string)$prev_cur
-            ]
+                "previous_cursor" => (string) $prev_cur,
+            ],
         ]);
     }
 
@@ -55,16 +55,16 @@ class RequestTest extends ModelsTestCase
             'first' => null,
             'last'  => null,
             'prev'  => "test/resource?$prev_name=$prev_cur",
-            'next'  => null
+            'next'  => null,
         ]]);
 
         $response->assertJsonFragment([
             "meta" => [
-                "path" => "test/resource?",
+                "path"            => "test/resource?",
                 "next_cursor"     => null,
                 "per_page"        => 5,
-                "previous_cursor" => (string)$prev_cur // Casted to string
-            ]
+                "previous_cursor" => (string) $prev_cur // Casted to string
+            ],
         ]);
     }
 
@@ -82,16 +82,16 @@ class RequestTest extends ModelsTestCase
             'first' => null,
             'last'  => null,
             'prev'  => "test/resource?$prev_name=$first",
-            'next'  => "test/resource?$next_name=$prev_cur_added&$prev_name=$prev_cur"
+            'next'  => "test/resource?$next_name=$prev_cur_added&$prev_name=$prev_cur",
         ]]);
 
         $response->assertJsonFragment([
             "meta" => [
-                "path" => "test/resource?",
-                "next_cursor"     => (string)$prev_cur_added,
+                "path"            => "test/resource?",
+                "next_cursor"     => (string) $prev_cur_added,
                 "per_page"        => 5,
-                "previous_cursor" => (string)$first
-            ]
+                "previous_cursor" => (string) $first,
+            ],
         ]);
 
         $data = json_decode($response->getOriginalContent())->data;
@@ -112,16 +112,16 @@ class RequestTest extends ModelsTestCase
             'first' => null,
             'last'  => null,
             'prev'  => null,
-            'next'  => "test/resource?$next_name=$next_cur_after&$prev_name=$prev_cur"
+            'next'  => "test/resource?$next_name=$next_cur_after&$prev_name=$prev_cur",
         ]]);
 
         $response->assertJsonFragment([
             "meta" => [
-                "path" => "test/resource?",
-                "next_cursor"     => (string)$next_cur_after,
+                "path"            => "test/resource?",
+                "next_cursor"     => (string) $next_cur_after,
                 "per_page"        => 5,
-                "previous_cursor" => null
-            ]
+                "previous_cursor" => null,
+            ],
         ]);
 
         $data = json_decode($response->getOriginalContent())->data;
@@ -142,16 +142,16 @@ class RequestTest extends ModelsTestCase
             'first' => null,
             'last'  => null,
             'prev'  => null,
-            'next'  => null
+            'next'  => null,
         ]]);
 
         $response->assertJsonFragment([
             "meta" => [
-                "path" => "test/resource?",
+                "path"            => "test/resource?",
                 "next_cursor"     => null,
                 "per_page"        => 5,
-                "previous_cursor" => null
-            ]
+                "previous_cursor" => null,
+            ],
         ]);
 
         $data = json_decode($response->getOriginalContent())->data;
@@ -170,7 +170,7 @@ class RequestTest extends ModelsTestCase
         //dd(json_decode($response->getOriginalContent()));
 
         $response->assertJsonFragment([$prev_name => null]);
-        $response->assertJsonFragment([$next_name => (string)($next_cur - 5)]);
+        $response->assertJsonFragment([$next_name => (string) ($next_cur - 5)]);
         $response->assertJsonFragment(['per_page' => config('cursor_pagination.per_page')]);
 
         $data = json_decode($response->getOriginalContent())->data;
@@ -186,7 +186,7 @@ class RequestTest extends ModelsTestCase
         $response = $this->get("/test/query_inverse?$next_name=$next_cur");
 
         $response->assertJsonFragment([$prev_name => null]);
-        $response->assertJsonFragment([$next_name => (string)($next_cur - 5)]);
+        $response->assertJsonFragment([$next_name => (string) ($next_cur - 5)]);
 
         $data = json_decode($response->getOriginalContent())->data;
         $ids = collect($data)->pluck('_id')->all();

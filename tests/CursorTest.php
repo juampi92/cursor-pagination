@@ -28,13 +28,13 @@ class CursorTest extends TestCase
 
     public function test_resolves_prev_cursor()
     {
-        $get_prev = config('cursor_pagination.navigation_names')[0] . '_' .
+        $get_prev = config('cursor_pagination.navigation_names')[0].'_'.
             config('cursor_pagination.identifier_name');
 
         $val = 2;
 
         $req = new Request([
-            $get_prev => $val
+            $get_prev => $val,
         ]);
 
         $cursor = CursorPaginator::resolveCurrentCursor($req);
@@ -47,13 +47,13 @@ class CursorTest extends TestCase
 
     public function test_resolves_next_cursor()
     {
-        $get_next = config('cursor_pagination.navigation_names')[1] . '_' .
+        $get_next = config('cursor_pagination.navigation_names')[1].'_'.
             config('cursor_pagination.identifier_name');
 
         $val = 3;
 
         $req = new Request([
-            $get_next => $val
+            $get_next => $val,
         ]);
 
         $cursor = CursorPaginator::resolveCurrentCursor($req);
