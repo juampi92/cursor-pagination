@@ -11,6 +11,8 @@ class ModelsTestCase extends TestCase
     public function setUp()
     {
         parent::setUp();
+        // Reset config on each request
+        config(['cursor_pagination' => require __DIR__ . '/Fixtures/config/simple.php']);
         $this->setUpDatabase($this->app);
         $this->setUpRoutes($this->app);
     }
@@ -51,10 +53,10 @@ class ModelsTestCase extends TestCase
             return User::cursorPaginate(5)->toJson();
         });
         \Route::get('/test/inverse', function () {
-            return User::orderBy('_id', 'desc')->cursorPaginate(5)->toJson();
+            return User::orderBy('_id', 'desc')->cursorPaginate()->toJson();
         });
         \Route::get('/test/query_inverse', function () {
-            return User::getQuery()->orderBy('_id', 'desc')->cursorPaginate(5)->toJson();
+            return User::getQuery()->orderBy('_id', 'desc')->cursorPaginate()->toJson();
         });
         \Route::get('/test/resource', function () {
             $res = (new \Illuminate\Http\Resources\Json\ResourceCollection(User::cursorPaginate(5)));

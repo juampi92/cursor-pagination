@@ -66,7 +66,7 @@ class CursorPaginationServiceProvider extends ServiceProvider
             }
 
             if (is_null($perPage)) {
-                $perPage = config('cursor_navigation.per_page', 10);
+                $perPage = config('cursor_pagination.per_page', 10);
             }
 
             // Dynamic perPage.

@@ -11,7 +11,7 @@ return [
     | of the array will be results per page when it's fetching previous, and
     | the second one is for next and normal fetches.
     */
-    'per_page'  => 15,
+    'per_page'  => 5,
     /*
     |--------------------------------------------------------------------------
     | Identifier name

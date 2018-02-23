@@ -14,14 +14,6 @@ use Juampi92\CursorPagination\Cursor;
 
 class UrlDetectionTest extends TestCase
 {
-    public function setUp()
-    {
-        parent::setUp();
-
-        // Reset config on each request
-        config(['cursor_pagination' => require __DIR__ . '/Fixtures/config/simple.php']);
-    }
-
     public function test_resolves_urls_on_no_cursor()
     {
         $p = new CursorPaginator($array = [

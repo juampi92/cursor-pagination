@@ -166,6 +166,7 @@ class RequestTest extends ModelsTestCase
 
         $response->assertJsonFragment([$prev_name => null]);
         $response->assertJsonFragment([$next_name => (string)($next_cur - 5)]);
+        $response->assertJsonFragment(['per_page' => config('cursor_pagination.per_page')]);
 
         $data = json_decode($response->getOriginalContent())->data;
         $ids = collect($data)->pluck('_id')->all();
