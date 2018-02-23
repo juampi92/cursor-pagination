@@ -153,4 +153,37 @@ class RequestTest extends ModelsTestCase
         $ids = collect($data)->pluck('_id')->all();
         $this->assertEquals($ids, range($next_cur + 1, min($next_cur + 5, $prev_cur - 1)));
     }
+
+    /** @test */
+    public function test_inverted_order()
+    {
+        list($prev_name, $next_name) = CursorPaginator::cursorQueryNames();
+        $next_cur = 36;
+
+        $response = $this->get("/test/inverse?$next_name=$next_cur");
+
+        //dd(json_decode($response->getOriginalContent()));
+
+        $response->assertJsonFragment([$prev_name => null]);
+        $response->assertJsonFragment([$next_name => (string)($next_cur - 5)]);
+
+        $data = json_decode($response->getOriginalContent())->data;
+        $ids = collect($data)->pluck('_id')->all();
+        $this->assertEquals($ids, array_reverse(range($next_cur - 5, $next_cur - 1)));
+    }
+
+    public function _test_on_query()
+    {
+        list($prev_name, $next_name) = CursorPaginator::cursorQueryNames();
+        $next_cur = 36;
+
+        $response = $this->get("/test/query_inverse?$next_name=$next_cur");
+
+        $response->assertJsonFragment([$prev_name => null]);
+        $response->assertJsonFragment([$next_name => (string)($next_cur - 5)]);
+
+        $data = json_decode($response->getOriginalContent())->data;
+        $ids = collect($data)->pluck('_id')->all();
+        $this->assertEquals($ids, array_reverse(range($next_cur - 5, $next_cur - 1)));
+    }
 }

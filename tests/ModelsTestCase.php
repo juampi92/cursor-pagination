@@ -50,6 +50,12 @@ class ModelsTestCase extends TestCase
         \Route::get('/test/one', function () {
             return User::cursorPaginate(5)->toJson();
         });
+        \Route::get('/test/inverse', function () {
+            return User::orderBy('_id', 'desc')->cursorPaginate(5)->toJson();
+        });
+        \Route::get('/test/query_inverse', function () {
+            return User::getQuery()->orderBy('_id', 'desc')->cursorPaginate(5)->toJson();
+        });
         \Route::get('/test/resource', function () {
             $res = (new \Illuminate\Http\Resources\Json\ResourceCollection(User::cursorPaginate(5)));
             return $res->toResponse(request())->getContent();

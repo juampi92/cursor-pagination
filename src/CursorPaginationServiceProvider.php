@@ -53,11 +53,16 @@ class CursorPaginationServiceProvider extends ServiceProvider
             // Resolve the cursor by using the request query params
             $cursor = CursorPaginator::resolveCurrentCursor($options['request']);
 
+            $query_orders = isset($this->query) ? $this->query->orders : $this->orders;
+
+            $identifier_sort_inverted = collect($query_orders)->firstWhere('column', $options['identifier']);
+            $identifier_sort_inverted = $identifier_sort_inverted ? $identifier_sort_inverted['direction'] === 'desc' : false;
+
             if ($cursor->isPrev()) {
-                $this->where($options['identifier'], '<', $cursor->getPrevCursor());
+                $this->where($options['identifier'], $identifier_sort_inverted ? '>' : '<', $cursor->getPrevCursor());
             }
             if ($cursor->isNext()) {
-                $this->where($options['identifier'], '>', $cursor->getNextCursor());
+                $this->where($options['identifier'], $identifier_sort_inverted ? '<' : '>', $cursor->getNextCursor());
             }
 
             if (is_null($perPage)) {
