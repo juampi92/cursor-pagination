@@ -3,7 +3,7 @@
     "description": "Cursor pagination made easy for Laravel",
     "homepage": "https://github.com/juampi92/cursor-pagination",
     "license": "MIT",
-    "keywords": ["laravel", "pagination"],
+    "keywords": ["laravel", "pagination", "api"],
     "authors": [
         {
             "name": "juampi92",
@@ -36,7 +36,7 @@
                 "Juampi92\\CursorPagination\\CursorPaginationServiceProvider"
             ],
             "aliases": {
-                "CursorPagination": "Juampi92\\CursorPagination\\Facades\\CursorPagination"
+                "CursorPagination": "Juampi92\\CursorPagination\\CursorPagination"
             }
         }
     }
