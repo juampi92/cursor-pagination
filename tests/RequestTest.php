@@ -35,6 +35,7 @@ class RequestTest extends ModelsTestCase
 
         $response->assertJsonFragment([
             "meta" => [
+                "path" => "test/resource?",
                 "next_cursor"     => (string)$next_cur,
                 "per_page"        => 5,
                 "previous_cursor" => (string)$prev_cur
@@ -59,6 +60,7 @@ class RequestTest extends ModelsTestCase
 
         $response->assertJsonFragment([
             "meta" => [
+                "path" => "test/resource?",
                 "next_cursor"     => null,
                 "per_page"        => 5,
                 "previous_cursor" => (string)$prev_cur // Casted to string
@@ -85,6 +87,7 @@ class RequestTest extends ModelsTestCase
 
         $response->assertJsonFragment([
             "meta" => [
+                "path" => "test/resource?",
                 "next_cursor"     => (string)$prev_cur_added,
                 "per_page"        => 5,
                 "previous_cursor" => (string)$first
@@ -114,6 +117,7 @@ class RequestTest extends ModelsTestCase
 
         $response->assertJsonFragment([
             "meta" => [
+                "path" => "test/resource?",
                 "next_cursor"     => (string)$next_cur_after,
                 "per_page"        => 5,
                 "previous_cursor" => null
@@ -143,6 +147,7 @@ class RequestTest extends ModelsTestCase
 
         $response->assertJsonFragment([
             "meta" => [
+                "path" => "test/resource?",
                 "next_cursor"     => null,
                 "per_page"        => 5,
                 "previous_cursor" => null

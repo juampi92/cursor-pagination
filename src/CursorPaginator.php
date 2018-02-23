@@ -195,7 +195,7 @@ class CursorPaginator extends AbstractPaginator implements Arrayable, ArrayAcces
      *
      * @return string
      */
-    public function url($cursor)
+    public function url($cursor = [])
     {
         $query = array_merge($this->query, $cursor);
 
@@ -266,6 +266,7 @@ class CursorPaginator extends AbstractPaginator implements Arrayable, ArrayAcces
 
         return [
             'data'          => $this->items->toArray(),
+            'path'          => $this->url(),
             $prev           => self::castCursor($this->prevCursor()),
             $next           => self::castCursor($this->nextCursor()),
             'per_page'      => (int)$this->perPage(),
