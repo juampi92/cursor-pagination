@@ -2,8 +2,8 @@
 
 namespace Juampi92\CursorPagination\Tests;
 
-use Orchestra\Testbench\TestCase as BaseTestCase;
 use Juampi92\CursorPagination\CursorPaginationServiceProvider;
+use Orchestra\Testbench\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
 {
