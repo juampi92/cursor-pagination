@@ -2,9 +2,9 @@
 
 namespace Juampi92\CursorPagination;
 
-use Illuminate\Support\ServiceProvider;
-use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
+use Illuminate\Database\Query\Builder as QueryBuilder;
+use Illuminate\Support\ServiceProvider;
 
 class CursorPaginationServiceProvider extends ServiceProvider
 {
@@ -17,7 +17,7 @@ class CursorPaginationServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__ . '/../config/cursor_pagination.php' => config_path('cursor_pagination.php'),
+                __DIR__.'/../config/cursor_pagination.php' => config_path('cursor_pagination.php'),
             ], 'config');
         }
 
@@ -31,11 +31,11 @@ class CursorPaginationServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->mergeConfigFrom(__DIR__ . '/../config/cursor_pagination.php', 'cursor_pagination');
+        $this->mergeConfigFrom(__DIR__.'/../config/cursor_pagination.php', 'cursor_pagination');
     }
 
     /**
-     * Create Macros for the Builders
+     * Create Macros for the Builders.
      */
     public function registerMacro()
     {

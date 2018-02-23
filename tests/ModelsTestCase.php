@@ -2,8 +2,8 @@
 
 namespace Juampi92\CursorPagination\Tests;
 
-use Illuminate\Foundation\Application;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Foundation\Application;
 use Juampi92\CursorPagination\Tests\Fixtures\Models\User;
 
 class ModelsTestCase extends TestCase
@@ -12,7 +12,7 @@ class ModelsTestCase extends TestCase
     {
         parent::setUp();
         // Reset config on each request
-        config(['cursor_pagination' => require __DIR__ . '/Fixtures/config/simple.php']);
+        config(['cursor_pagination' => require __DIR__.'/Fixtures/config/simple.php']);
         $this->setUpDatabase($this->app);
         $this->setUpRoutes($this->app);
     }
@@ -60,6 +60,7 @@ class ModelsTestCase extends TestCase
         });
         \Route::get('/test/resource', function () {
             $res = (new \Illuminate\Http\Resources\Json\ResourceCollection(User::cursorPaginate(5)));
+
             return $res->toResponse(request())->getContent();
         });
     }

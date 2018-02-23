@@ -9,7 +9,6 @@ use Juampi92\CursorPagination\Tests\Fixtures\Models\User;
 
 class MacroTest extends ModelsTestCase
 {
-
     public function test_exist()
     {
         $macroName = 'cursorPaginate';
@@ -41,7 +40,7 @@ class MacroTest extends ModelsTestCase
     public function test_on_query_builder_with_identifier()
     {
         $p = \DB::table('users')->cursorPaginate(2, ['*'], [
-            'identifier' => '_id'
+            'identifier' => '_id',
         ]);
         $this->assertInstanceOf(CursorPaginator::class, $p);
 
@@ -54,9 +53,9 @@ class MacroTest extends ModelsTestCase
 
         $p = User::cursorPaginate([$prev_count = 2, $next_count = 4], ['*'], [
             'request' => $req = new Request([
-                $prev_name => User::orderBy('_id', 'desc')->first()->_id
+                $prev_name => User::orderBy('_id', 'desc')->first()->_id,
             ]),
-            'path'    => '/'
+            'path'    => '/',
         ]);
 
         $this->assertAttributeEquals($prev_count, 'perPage', $p);
@@ -69,7 +68,7 @@ class MacroTest extends ModelsTestCase
 
         $p = User::cursorPaginate([$prev_count = 2, $next_count = 4], ['*'], [
             'request' => $req = new Request(),
-            'path'    => '/'
+            'path'    => '/',
         ]);
 
         $this->assertAttributeEquals($next_count, 'perPage', $p);
@@ -82,9 +81,9 @@ class MacroTest extends ModelsTestCase
 
         $p = User::cursorPaginate([$prev_count = 2, $next_count = 4], ['*'], [
             'request' => $req = new Request([
-                $next_name => 1
+                $next_name => 1,
             ]),
-            'path'    => '/'
+            'path'    => '/',
         ]);
 
         $this->assertAttributeEquals($next_count, 'perPage', $p);
@@ -98,13 +97,11 @@ class MacroTest extends ModelsTestCase
         $p = User::cursorPaginate(10, ['*'], [
             'request' => $req = new Request([
                 $prev_name => $prev_val = 6,
-                $next_name => $next_val = 1
+                $next_name => $next_val = 1,
             ]),
-            'path'    => '/'
+            'path'    => '/',
         ]);
 
         $this->assertEquals(count($p->toArray()['data']), $prev_val - $next_val - 1);
     }
-
-
 }
