@@ -9,7 +9,6 @@ use Juampi92\CursorPagination\Tests\Fixtures\Models\User;
 
 class MacroTest extends ModelsTestCase
 {
-
     public function test_exist()
     {
         $macroName = 'cursorPaginate';
@@ -105,6 +104,4 @@ class MacroTest extends ModelsTestCase
 
         $this->assertEquals(count($p->toArray()['data']), $prev_val - $next_val - 1);
     }
-
-
 }
