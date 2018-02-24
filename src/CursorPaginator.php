@@ -57,7 +57,7 @@ class CursorPaginator extends AbstractPaginator implements Arrayable, ArrayAcces
             $this->request = request();
         }
 
-        $this->cursor = CursorPaginator::resolveCurrentCursor($this->request);
+        $this->cursor = self::resolveCurrentCursor($this->request);
 
         $this->query = $this->getRawQuery();
         $this->path = $this->path !== '/' ? rtrim($this->path, '/') : rtrim($this->request->path(), '/');
@@ -68,7 +68,7 @@ class CursorPaginator extends AbstractPaginator implements Arrayable, ArrayAcces
     /**
      * Set the items for the paginator.
      *
-     * @param  mixed $items
+     * @param mixed $items
      *
      * @return void
      */
@@ -242,8 +242,8 @@ class CursorPaginator extends AbstractPaginator implements Arrayable, ArrayAcces
     /**
      * Render the paginator using a given view.
      *
-     * @param  string|null $view
-     * @param  array       $data
+     * @param string|null $view
+     * @param array       $data
      *
      * @return string
      */
