@@ -60,6 +60,7 @@ class ModelsTestCase extends TestCase
         });
         \Route::get('/test/resource', function () {
             $res = (new \Illuminate\Http\Resources\Json\ResourceCollection(User::cursorPaginate(5)));
+
             return $res->toResponse(request())->getContent();
         });
     }

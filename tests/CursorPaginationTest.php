@@ -22,7 +22,7 @@ class CursorPaginationTest extends TestCase
         ], $perPage = 2);
 
         $this->assertEquals($p->items(), [
-            $array[0], $array[1]
+            $array[0], $array[1],
         ]);
     }
 
@@ -45,7 +45,7 @@ class CursorPaginationTest extends TestCase
         $p = new CursorPaginator($array = [
             (object) ['id' => 1],
             (object) ['id' => 2],
-            (object) ['id' => 3]
+            (object) ['id' => 3],
         ], $perPage = 3);
 
         $this->assertEquals($p->nextCursor(), null);
