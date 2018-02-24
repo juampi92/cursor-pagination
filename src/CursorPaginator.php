@@ -197,7 +197,8 @@ class CursorPaginator extends AbstractPaginator implements Arrayable, ArrayAcces
 
         return $this->path
             .(str_contains($this->path, '?') ? '&' : '?')
-            .http_build_query($query, '', '&');
+            .http_build_query($query, '', '&')
+            .$this->buildFragment();
     }
 
     /**
