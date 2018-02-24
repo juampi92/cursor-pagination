@@ -40,6 +40,17 @@ This kind of pagination is useful when you sort using the latest first, so you c
 or do a `previous_cursor` whenever you need to refresh the list at the top, and if you send the first cursor,
 the results will only fetch the new ones.
 
+#### Pros
+ - New rows don't affect the result, so no duplicated results when paginating.
+ - Filtering by an indexed cursor is way faster that using database offset.
+ - Using previous cursor to avoid duplicating the first elements.
+ 
+#### Cons
+ - No previous page, although the browser still has them.
+ - No navigating to arbitrary pages (you must know the previous result to know the next ones).
+
+Basically, **it's perfect for infinite scrolling!**
+
 ## Basic Usage
 
 ### Paginating Query Builder Results
@@ -114,9 +125,7 @@ Calling `api/v1` will output:
    "next_page_url": "api/v1?next_cursor=3",
    "prev_page_url": "api/v1?previous_cursor=1",
    "data": [
-        {
-            // Result Object
-        }, 
+        {}, 
    ]
 }
 ````
@@ -129,9 +138,7 @@ into `links` and `meta`.
 ````json
 {
    "data":[
-        {
-            // Result Object
-        }, 
+        {}, 
    ],
    "links": {
        "first": null,
