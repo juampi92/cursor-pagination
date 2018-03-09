@@ -29,7 +29,7 @@ class CursorPaginator extends AbstractPaginator implements Arrayable, ArrayAcces
     protected $identifier = 'id';
 
     /**
-     * Should cast to date the identifier
+     * Should cast to date the identifier.
      *
      * @var bool
      */
@@ -264,12 +264,12 @@ class CursorPaginator extends AbstractPaginator implements Arrayable, ArrayAcces
      *
      * @param $model
      *
-     * @return mixed|null
+     * @return mixed
      */
     protected function getIdentifier($model)
     {
         if (!isset($model)) {
-            return null;
+            return;
         }
 
         $id = $model->{$this->identifier};

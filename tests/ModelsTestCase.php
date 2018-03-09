@@ -46,7 +46,7 @@ class ModelsTestCase extends TestCase
         foreach (range(1, 40) as $index) {
             User::create([
                 'name'     => "user{$index}",
-                'datetime' => date("Y-m-d H:i:s", mt_rand(strtotime('last month'), strtotime('now'))),
+                'datetime' => date('Y-m-d H:i:s', mt_rand(strtotime('last month'), strtotime('now'))),
             ]);
         }
     }

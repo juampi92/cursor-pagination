@@ -77,7 +77,7 @@ class UrlDetectionTest extends TestCase
 
     public function test_resolves_prev_intact_if_no_elements()
     {
-        list($prev_name,) = CursorPaginator::cursorQueryNames(true);
+        list($prev_name) = CursorPaginator::cursorQueryNames(true);
 
         $p = new CursorPaginator($array = [], $perPage = 2, [
             'request' => new Request([

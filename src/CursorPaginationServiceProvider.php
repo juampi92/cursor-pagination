@@ -47,7 +47,6 @@ class CursorPaginationServiceProvider extends ServiceProvider
          * @return CursorPaginator
          */
         $macro = function ($perPage = null, $columns = ['*'], array $options = []) {
-
             $query_orders = isset($this->query) ? collect($this->query->orders) : collect($this->orders);
             $identifier_sort = null;
 
@@ -63,7 +62,6 @@ class CursorPaginationServiceProvider extends ServiceProvider
                     // If has no orderBy clause, use the primaryKeyName (if it's a Model), or the default 'id'
                     $options['identifier'] = isset($this->model) ? $this->model->getKeyName() : 'id';
                 }
-
             } else {
                 $identifier_sort = $query_orders->firstWhere('column', $options['identifier']);
             }
