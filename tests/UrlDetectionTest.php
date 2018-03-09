@@ -24,7 +24,7 @@ class UrlDetectionTest extends TestCase
         $this->assertTrue($p->isFirstPage());
         $this->assertEquals($p->prevCursor(), 1);
 
-        list($prev_name, $next_name) = CursorPaginator::cursorQueryNames(true);
+        list($prev_name, $next_name) = CursorPaginator::cursorQueryNames();
 
         $this->assertEquals($p->previousPageUrl(), "$path?$prev_name=$firstId");
         $this->assertEquals($p->nextPageUrl(), "$path?$next_name=$lastId");
@@ -32,7 +32,7 @@ class UrlDetectionTest extends TestCase
 
     public function test_resolves_no_prev_on_cursor()
     {
-        list(, $next_name) = CursorPaginator::cursorQueryNames(true);
+        list(, $next_name) = CursorPaginator::cursorQueryNames();
 
         $p = new CursorPaginator($array = [
             (object) ['id' => 2],
@@ -56,7 +56,7 @@ class UrlDetectionTest extends TestCase
 
     public function test_resolves_with_other_query()
     {
-        list(, $next_name) = CursorPaginator::cursorQueryNames(true);
+        list(, $next_name) = CursorPaginator::cursorQueryNames();
 
         $p = new CursorPaginator($array = [
             (object) ['id' => 2],
@@ -77,7 +77,7 @@ class UrlDetectionTest extends TestCase
 
     public function test_resolves_prev_intact_if_no_elements()
     {
-        list($prev_name) = CursorPaginator::cursorQueryNames(true);
+        list($prev_name) = CursorPaginator::cursorQueryNames();
 
         $p = new CursorPaginator($array = [], $perPage = 2, [
             'request' => new Request([
@@ -91,7 +91,7 @@ class UrlDetectionTest extends TestCase
 
     public function test_stops_when_no_more_items()
     {
-        list(, $next_name) = CursorPaginator::cursorQueryNames(true);
+        list(, $next_name) = CursorPaginator::cursorQueryNames();
 
         $p = new CursorPaginator($array = [
             (object) ['id' => 98],
@@ -110,7 +110,7 @@ class UrlDetectionTest extends TestCase
 
     public function test_different_identifier()
     {
-        CursorPaginator::cursorQueryNames(true);
+        CursorPaginator::cursorQueryNames();
 
         $p = new CursorPaginator($array = [
             (object) ['id' => 98, '_id' => 1],

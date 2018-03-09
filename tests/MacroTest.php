@@ -49,7 +49,7 @@ class MacroTest extends ModelsTestCase
 
     public function test_perPage_dynamic_prev()
     {
-        list($prev_name, $next_name) = CursorPaginator::cursorQueryNames(true);
+        list($prev_name, $next_name) = CursorPaginator::cursorQueryNames();
 
         $p = User::cursorPaginate([$prev_count = 2, $next_count = 4], ['*'], [
             'request' => $req = new Request([
@@ -64,7 +64,7 @@ class MacroTest extends ModelsTestCase
 
     public function test_perPage_dynamic_empty_cursor_defaults_next()
     {
-        list($prev_name, $next_name) = CursorPaginator::cursorQueryNames(true);
+        list($prev_name, $next_name) = CursorPaginator::cursorQueryNames();
 
         $p = User::cursorPaginate([$prev_count = 2, $next_count = 4], ['*'], [
             'request' => $req = new Request(),
@@ -77,7 +77,7 @@ class MacroTest extends ModelsTestCase
 
     public function test_perPage_dynamic_next()
     {
-        list($prev_name, $next_name) = CursorPaginator::cursorQueryNames(true);
+        list($prev_name, $next_name) = CursorPaginator::cursorQueryNames();
 
         $p = User::cursorPaginate([$prev_count = 2, $next_count = 4], ['*'], [
             'request' => $req = new Request([
@@ -92,7 +92,7 @@ class MacroTest extends ModelsTestCase
 
     public function test_both_pagination()
     {
-        list($prev_name, $next_name) = CursorPaginator::cursorQueryNames(true);
+        list($prev_name, $next_name) = CursorPaginator::cursorQueryNames();
 
         $p = User::cursorPaginate(10, ['*'], [
             'request' => $req = new Request([

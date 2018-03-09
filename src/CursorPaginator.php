@@ -15,7 +15,6 @@ use JsonSerializable;
 
 class CursorPaginator extends AbstractPaginator implements Arrayable, ArrayAccess, Countable, IteratorAggregate, JsonSerializable, Jsonable, PaginatorContract
 {
-    private static $queue_names_cache;
     /**
      * Determine if there are more items in the data source.
      *
@@ -44,6 +43,11 @@ class CursorPaginator extends AbstractPaginator implements Arrayable, ArrayAcces
      * @var Cursor
      */
     protected $cursor = null;
+
+    /**
+     * @var array|null
+     */
+    protected $cursor_queue_names = null;
 
     /**
      * Create a new paginator instance.
@@ -105,25 +109,29 @@ class CursorPaginator extends AbstractPaginator implements Arrayable, ArrayAcces
     }
 
     /**
-     * @param bool $force (Don't use cache)
-     *
      * @return array
      */
-    public static function cursorQueryNames($force = false)
+    public static function cursorQueryNames()
     {
-        if (!$force && isset(static::$queue_names_cache)) {
-            return static::$queue_names_cache;
-        }
-
         $ident = config('cursor_pagination.identifier_name');
         list($prev, $next) = config('cursor_pagination.navigation_names');
 
-        static::$queue_names_cache = [
+        return [
             self::formatNames("{$prev}_$ident"),
             self::formatNames("{$next}_$ident"),
         ];
+    }
 
-        return static::$queue_names_cache;
+    /**
+     * @return array
+     */
+    public function getCursorQueryNames()
+    {
+        if (is_null($this->cursor_queue_names)) {
+            $this->cursor_queue_names = static::cursorQueryNames();
+        }
+
+        return $this->cursor_queue_names;
     }
 
     protected static function formatNames($name)
@@ -149,7 +157,7 @@ class CursorPaginator extends AbstractPaginator implements Arrayable, ArrayAcces
      */
     public function nextPageUrl()
     {
-        list($prev, $next) = self::cursorQueryNames();
+        list($prev, $next) = $this->getCursorQueryNames();
 
         if ($this->nextCursor()) {
             $query = [
@@ -181,7 +189,7 @@ class CursorPaginator extends AbstractPaginator implements Arrayable, ArrayAcces
      */
     public function previousPageUrl()
     {
-        list($prev) = self::cursorQueryNames();
+        list($prev) = $this->getCursorQueryNames();
 
         if ($pre_cursor = $this->prevCursor()) {
             return $this->url([
@@ -197,7 +205,7 @@ class CursorPaginator extends AbstractPaginator implements Arrayable, ArrayAcces
      */
     protected function getRawQuery()
     {
-        list($prev, $next) = self::cursorQueryNames();
+        list($prev, $next) = $this->getCursorQueryNames();
 
         return collect($this->request->query())
             ->diffKeys([
@@ -302,7 +310,7 @@ class CursorPaginator extends AbstractPaginator implements Arrayable, ArrayAcces
      */
     public function toArray()
     {
-        list($prev, $next) = self::cursorQueryNames();
+        list($prev, $next) = $this->getCursorQueryNames();
 
         return [
             'data'          => $this->items->toArray(),

@@ -9,18 +9,17 @@ class CursorNameTest extends TestCase
     public function test_camel_case()
     {
         config(['cursor_pagination.camel_case' => false]);
-        list($prev_name, $next_name) = CursorPaginator::cursorQueryNames(true);
+        list($prev_name, $next_name) = CursorPaginator::cursorQueryNames();
 
         $this->assertContains('_', $prev_name);
         $this->assertContains('_', $next_name);
 
         config(['cursor_pagination.camel_case' => true]);
-        list($prev_name, $next_name) = CursorPaginator::cursorQueryNames(true);
+        list($prev_name, $next_name) = CursorPaginator::cursorQueryNames();
 
         $this->assertNotContains('_', $prev_name);
         $this->assertNotContains('_', $next_name);
 
         config(['cursor_pagination.camel_case' => false]);
-        list($prev_name, $next_name) = CursorPaginator::cursorQueryNames(true);
     }
 }

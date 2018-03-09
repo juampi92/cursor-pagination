@@ -9,7 +9,7 @@ class RequestTest extends ModelsTestCase
     /** @test */
     public function test_a()
     {
-        list($prev_name, $next_name) = CursorPaginator::cursorQueryNames(true);
+        list($prev_name, $next_name) = CursorPaginator::cursorQueryNames();
 
         $response = $this->get('/test/one/?asd=1');
 
@@ -20,7 +20,7 @@ class RequestTest extends ModelsTestCase
     /** @test */
     public function test_resource()
     {
-        list($prev_name, $next_name) = CursorPaginator::cursorQueryNames(true);
+        list($prev_name, $next_name) = CursorPaginator::cursorQueryNames();
         $prev_cur = 1;
         $next_cur = 5;
 
@@ -46,7 +46,7 @@ class RequestTest extends ModelsTestCase
     /** @test */
     public function test_prev_nav()
     {
-        list($prev_name, $next_name) = CursorPaginator::cursorQueryNames(true);
+        list($prev_name, $next_name) = CursorPaginator::cursorQueryNames();
         $prev_cur = 1;
 
         $response = $this->get("/test/resource?$prev_name=$prev_cur");
@@ -70,7 +70,7 @@ class RequestTest extends ModelsTestCase
 
     public function test_more_middle_pagination()
     {
-        list($prev_name, $next_name) = CursorPaginator::cursorQueryNames(true);
+        list($prev_name, $next_name) = CursorPaginator::cursorQueryNames();
         $prev_cur = 10;
         $prev_cur_added = $prev_cur - 5;
         $next_cur = 0;
@@ -101,7 +101,7 @@ class RequestTest extends ModelsTestCase
 
     public function test_prev_is_still_present()
     {
-        list($prev_name, $next_name) = CursorPaginator::cursorQueryNames(true);
+        list($prev_name, $next_name) = CursorPaginator::cursorQueryNames();
         $prev_cur = 10;
         $next_cur = 2;
         $next_cur_after = $next_cur + 5;
@@ -132,7 +132,7 @@ class RequestTest extends ModelsTestCase
     /** @test */
     public function test_surroundings_finished()
     {
-        list($prev_name, $next_name) = CursorPaginator::cursorQueryNames(true);
+        list($prev_name, $next_name) = CursorPaginator::cursorQueryNames();
         $prev_cur = 10;
         $next_cur = 7;
 
@@ -162,7 +162,7 @@ class RequestTest extends ModelsTestCase
     /** @test */
     public function test_inverted_order()
     {
-        list($prev_name, $next_name) = CursorPaginator::cursorQueryNames(true);
+        list($prev_name, $next_name) = CursorPaginator::cursorQueryNames();
         $next_cur = 36;
 
         $response = $this->get("/test/inverse?$next_name=$next_cur");
@@ -180,7 +180,7 @@ class RequestTest extends ModelsTestCase
 
     public function test_on_query()
     {
-        list($prev_name, $next_name) = CursorPaginator::cursorQueryNames(true);
+        list($prev_name, $next_name) = CursorPaginator::cursorQueryNames();
         $next_cur = 36;
 
         $response = $this->get("/test/query_inverse?$next_name=$next_cur");

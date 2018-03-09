@@ -66,7 +66,7 @@ class CursorTest extends TestCase
 
     public function test_both_cursor()
     {
-        list($prev_name, $next_name) = CursorPaginator::cursorQueryNames(true);
+        list($prev_name, $next_name) = CursorPaginator::cursorQueryNames();
 
         $prev_val = 3;
         $next_val = 1;
