@@ -39,5 +39,8 @@
                 "CursorPagination": "Juampi92\\CursorPagination\\CursorPagination"
             }
         }
+    },
+    "scripts": {
+        "test": "phpunit --testdox"
     }
 }

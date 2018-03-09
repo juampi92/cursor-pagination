@@ -98,11 +98,13 @@ class CursorPaginator extends AbstractPaginator implements Arrayable, ArrayAcces
     }
 
     /**
+     * @param bool $force (Don't use cache)
+     *
      * @return array
      */
-    public static function cursorQueryNames()
+    public static function cursorQueryNames($force = false)
     {
-        if (isset(static::$queue_names_cache)) {
+        if (!$force && isset(static::$queue_names_cache)) {
             return static::$queue_names_cache;
         }
 
@@ -110,11 +112,22 @@ class CursorPaginator extends AbstractPaginator implements Arrayable, ArrayAcces
         list($prev, $next) = config('cursor_pagination.navigation_names');
 
         static::$queue_names_cache = [
-            "{$prev}_{$ident}",
-            "{$next}_{$ident}",
+            self::formatNames("{$prev}_$ident"),
+            self::formatNames("{$next}_$ident"),
         ];
 
         return static::$queue_names_cache;
+    }
+
+    protected static function formatNames($name)
+    {
+        $camel_case = config('cursor_pagination.camel_case', false);
+
+        if ($camel_case) {
+            return camel_case($name);
+        }
+
+        return $name;
     }
 
     public function nextCursor()

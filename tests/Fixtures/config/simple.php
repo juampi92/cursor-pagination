@@ -37,4 +37,14 @@ return [
     */
     'navigation_names' => ['previous', 'next'],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Camel Case Names
+    |--------------------------------------------------------------------------
+    |
+    | Use camel case instead of snake case.
+    |
+    | Examples: previousCursor (camel) instead of previous_cursor (snake)
+    */
+    'camel_case'       => false,
 ];

@@ -11,7 +11,7 @@ return [
     | of the array will be results per page when it's fetching previous, and
     | the second one is for next and normal fetches.
     */
-    'per_page'  => 15,
+    'per_page'         => 15,
     /*
     |--------------------------------------------------------------------------
     | Identifier name
@@ -37,4 +37,14 @@ return [
     */
     'navigation_names' => ['previous', 'next'],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Camel Case Names
+    |--------------------------------------------------------------------------
+    |
+    | Use camel case instead of snake case.
+    |
+    | Examples: previousCursor (camel) instead of previous_cursor (snake)
+    */
+    'camel_case'       => false,
 ];
