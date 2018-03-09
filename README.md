@@ -260,6 +260,22 @@ This way, when you do a *'refresh'*, you can fetch more results than if you are 
  
 To configure that, set `$perPage = [15, 5]`. That way it'll fetch 15 when you do a `previous_cursor`, and 5 when you do a normal fetch or a `next_cursor`. 
 
+## Customizing param names
+
+On the config, change `identifier_name` to change the word `cursor`. Examples: `cursor`, `id`, `pointer`, etc. 
+  
+Change `navigation_names` to change the words `['previous', 'next']`.
+Examples:  `['before', 'after']` , `['min', 'max']`
+
+##### Transforming the result:
+Edit `transform_name` to format the string differently:
+
+- For `previousCursor` use 'camel_case'
+- For `previous-cursor` use 'kebab_case'.
+- For `previous_cursor` use 'snake_case'.
+
+Using `null` defaults to camelCase.
+
 ## API Docs
 
 ### Paginator custom options

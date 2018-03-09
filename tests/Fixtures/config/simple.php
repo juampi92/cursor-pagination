@@ -11,7 +11,7 @@ return [
     | of the array will be results per page when it's fetching previous, and
     | the second one is for next and normal fetches.
     */
-    'per_page'  => 5,
+    'per_page'         => 5,
     /*
     |--------------------------------------------------------------------------
     | Identifier name
@@ -38,13 +38,14 @@ return [
     'navigation_names' => ['previous', 'next'],
 
     /*
-    |--------------------------------------------------------------------------
-    | Camel Case Names
-    |--------------------------------------------------------------------------
-    |
-    | Use camel case instead of snake case.
-    |
-    | Examples: previousCursor (camel) instead of previous_cursor (snake)
-    */
-    'camel_case'       => false,
+   |--------------------------------------------------------------------------
+   | Transform Name
+   |--------------------------------------------------------------------------
+   |
+   | Specify a global function to be called to format the original snake_case.
+   | Can use Laravel's Helper functions.
+   |
+   | Examples: 'camel_case', 'kebab_case', 'snake_case'.
+   */
+    'transform_name'   => 'snake_case',
 ];

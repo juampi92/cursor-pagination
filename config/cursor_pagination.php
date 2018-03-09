@@ -39,12 +39,13 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Camel Case Names
+    | Transform Name
     |--------------------------------------------------------------------------
     |
-    | Use camel case instead of snake case.
+    | Specify a global function to be called to format the original snake_case.
+    | Can use Laravel's Helper functions.
     |
-    | Examples: previousCursor (camel) instead of previous_cursor (snake)
+    | Examples: 'camel_case', 'kebab_case', 'snake_case'.
     */
-    'camel_case'       => false,
+    'transform_name'   => 'snake_case',
 ];
