@@ -178,7 +178,7 @@ class RequestTest extends ModelsTestCase
         $this->assertEquals($ids, array_reverse(range($next_cur - 5, $next_cur - 1)));
     }
 
-    public function _test_on_query()
+    public function test_on_query()
     {
         list($prev_name, $next_name) = CursorPaginator::cursorQueryNames(true);
         $next_cur = 36;

@@ -29,6 +29,13 @@ class CursorPaginator extends AbstractPaginator implements Arrayable, ArrayAcces
     protected $identifier = 'id';
 
     /**
+     * Should cast to date the identifier
+     *
+     * @var bool
+     */
+    protected $date_identifier = false;
+
+    /**
      * @var Request
      */
     protected $request = null;
@@ -239,7 +246,7 @@ class CursorPaginator extends AbstractPaginator implements Arrayable, ArrayAcces
      */
     public function firstItem()
     {
-        return optional($this->items->first())->{$this->identifier};
+        return $this->getIdentifier($this->items->first());
     }
 
     /**
@@ -249,7 +256,29 @@ class CursorPaginator extends AbstractPaginator implements Arrayable, ArrayAcces
      */
     public function lastItem()
     {
-        return optional($this->items->last())->{$this->identifier};
+        return $this->getIdentifier($this->items->last());
+    }
+
+    /**
+     * Gets and casts identifier.
+     *
+     * @param $model
+     *
+     * @return mixed|null
+     */
+    protected function getIdentifier($model)
+    {
+        if (!isset($model)) {
+            return null;
+        }
+
+        $id = $model->{$this->identifier};
+
+        if (!$this->date_identifier) {
+            return $id;
+        }
+
+        return (is_string($id)) ? strtotime($id) : $id->timestamp;
     }
 
     /**

@@ -39,11 +39,37 @@ class CursorPaginationServiceProvider extends ServiceProvider
      */
     public function registerMacro()
     {
+        /**
+         * @param null  $perPage default=null
+         * @param array $columns default=['*']
+         * @param array $options
+         *
+         * @return CursorPaginator
+         */
         $macro = function ($perPage = null, $columns = ['*'], array $options = []) {
 
-            // Use model's key name by default if EloquentBuilder
+            $query_orders = isset($this->query) ? collect($this->query->orders) : collect($this->orders);
+            $identifier_sort = null;
+
+            // Build the default identifier by considering column sorting and primaryKeys
             if (!isset($options['identifier'])) {
-                $options['identifier'] = isset($this->model) ? $this->model->getKeyName() : 'id';
+
+                // Check if has explicit orderBy clause
+                if ($query_orders->isNotEmpty()) {
+                    // Make the identifier the name of the first sorted column
+                    $identifier_sort = $query_orders->first();
+                    $options['identifier'] = $identifier_sort['column'];
+                } else {
+                    // If has no orderBy clause, use the primaryKeyName (if it's a Model), or the default 'id'
+                    $options['identifier'] = isset($this->model) ? $this->model->getKeyName() : 'id';
+                }
+
+            } else {
+                $identifier_sort = $query_orders->firstWhere('column', $options['identifier']);
+            }
+
+            if (!isset($options['date_identifier']) && isset($this->model)) {
+                $options['date_identifier'] = $this->model->hasCast($options['identifier'], ['datetime', 'date']);
             }
 
             if (!isset($options['request'])) {
@@ -53,10 +79,8 @@ class CursorPaginationServiceProvider extends ServiceProvider
             // Resolve the cursor by using the request query params
             $cursor = CursorPaginator::resolveCurrentCursor($options['request']);
 
-            $query_orders = isset($this->query) ? $this->query->orders : $this->orders;
-
-            $identifier_sort_inverted = collect($query_orders)->firstWhere('column', $options['identifier']);
-            $identifier_sort_inverted = $identifier_sort_inverted ? $identifier_sort_inverted['direction'] === 'desc' : false;
+            // If there's a sorting by the identifier, check if it's desc so the cursor is inverted
+            $identifier_sort_inverted = $identifier_sort ? $identifier_sort['direction'] === 'desc' : false;
 
             if ($cursor->isPrev()) {
                 $this->where($options['identifier'], $identifier_sort_inverted ? '>' : '<', $cursor->getPrevCursor());
@@ -65,6 +89,7 @@ class CursorPaginationServiceProvider extends ServiceProvider
                 $this->where($options['identifier'], $identifier_sort_inverted ? '<' : '>', $cursor->getNextCursor());
             }
 
+            // Use configs perPage if it's not defined
             if (is_null($perPage)) {
                 $perPage = config('cursor_pagination.per_page', 10);
             }

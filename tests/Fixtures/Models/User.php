@@ -9,4 +9,6 @@ class User extends Model
     protected $guarded = [];
 
     protected $primaryKey = '_id';
+
+    protected $casts = ['datetime' => 'datetime'];
 }

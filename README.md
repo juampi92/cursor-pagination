@@ -66,7 +66,6 @@ This value is automatically detected by the package taking your custom config in
 public function index()
 {
     $users = DB::table('users')->cursorPaginate();
-    
     return $users;
 }
 ````
@@ -94,6 +93,81 @@ $users = User::orderBy('id', 'desc')->cursorPaginate(15);
 
 Don't worry, the package will detect if the model's primary key is being used for sorting, and it will adapt
 itself so the next and previous work as expected.
+
+### Identifier
+
+The paginator identifier is basically the cursor attribute. The model's attribute that will be used for paginating.
+It's really important that this identifier is **unique** on the results. Duplicated identifiers could cause that some
+records are not showed, so be careful.
+
+*If the query is not sorted by the identifier, the cursor pagination might not work as expected.*
+
+####  Auto-detecting Identifier
+
+If no identifier is defined, the cursor will try to figure it out by itself. First, it will check if there's any orderBy clause.
+If there is, it will take the **first column** that is sorted and will use that.
+If there is not any orderBy clause, it will check if it's an Eloquent model, and will use it's `primaryKey` (by default it's 'id').
+And if it's not an Eloquent Model, it'll use `id`.
+
+##### Example
+
+````php
+// Will use Booking's primaryKey
+Bookings::cursorPaginate(10);
+````
+
+````php
+// Will use hardcoded 'id'
+DB::table('bookings')->cursorPaginate(10);
+````
+
+````php
+// Will use 'created_by'
+Bookings::orderBy('created_by', 'asc')
+    ->cursorPaginate(10);
+````
+
+#### Customizing Identifier
+
+Just define the `identifier` option
+
+````php
+// Will use _id, ignoring everything else.
+Bookings::cursorPaginate(10, ['*'], [
+    'identifier'      => '_id'
+]);
+````
+
+### Date cursors
+
+By default, the identifier is the model's primaryKey (or `id` in case it's not an Eloquent model) so there are no duplicates,
+but you can adjust this by passing a custom `identifier` option. In case that specified identifier is casted to date or datetime
+on Eloquent's `$casts` property, the paginator will convert it into **unix timestamp** for you.
+
+You can also specify it manually by adding a `[ 'date_identifier' => true ]` option.
+
+##### Example
+
+Using Eloquent (make sure Booking Model has ` protected $casts = ['datetime' => 'datetime']; `)
+
+````php
+// It will autodetect 'datetime' as identifier,
+//   and will detect it's casted to datetime.
+Bookings::orderBy('datetime', 'asc')
+    ->cursorPaginate(10);
+````
+
+Using Query
+````php
+// It will autodetect 'datetime' as identifier,
+//   but since there is no model, you'll have to
+//   specify the 'date_identifier' option to `true`
+DB::table('bookings')
+    ->orderBy('datetime', 'asc')
+    ->cursorPaginate(10, ['*'], [
+        'date_identifier' => true
+    ]);
+````
 
 ### Inherits Laravel's Pagination
 
@@ -125,7 +199,7 @@ Calling `api/v1` will output:
    "next_page_url": "api/v1?next_cursor=3",
    "prev_page_url": "api/v1?previous_cursor=1",
    "data": [
-        {}, 
+        {}
    ]
 }
 ````
@@ -138,7 +212,7 @@ into `links` and `meta`.
 ````json
 {
    "data":[
-        {}, 
+        {}
    ],
    "links": {
        "first": null,
@@ -151,7 +225,7 @@ into `links` and `meta`.
        "previous_cursor": "1",
        "next_cursor": "3",
        "per_page": 3
-   },
+   }
 }
 ````
  
@@ -193,8 +267,9 @@ To configure that, set `$perPage = [15, 5]`. That way it'll fetch 15 when you do
 ````php
 new CursorPaginator(array|collection $items, array|int $perPage, array options = [
     // Attribute used for choosing the cursor. Used primaryKey on Eloquent Models as default.
-    'identifier' => 'id',
-    'path' => request()->path(),
+    'identifier'      => 'id',
+    'date_identifier' => false,
+    'path'            => request()->path(),
 ]);
 ````
 

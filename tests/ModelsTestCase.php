@@ -39,11 +39,15 @@ class ModelsTestCase extends TestCase
         $app['db']->connection()->getSchemaBuilder()->create('users', function (Blueprint $table) {
             $table->increments('_id');
             $table->string('name');
+            $table->dateTime('datetime');
             $table->rememberToken();
             $table->timestamps();
         });
         foreach (range(1, 40) as $index) {
-            User::create(['name' => "user{$index}"]);
+            User::create([
+                'name'     => "user{$index}",
+                'datetime' => date("Y-m-d H:i:s", mt_rand(strtotime('last month'), strtotime('now'))),
+            ]);
         }
     }
 

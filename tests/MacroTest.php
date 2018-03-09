@@ -104,4 +104,48 @@ class MacroTest extends ModelsTestCase
 
         $this->assertEquals(count($p->toArray()['data']), $prev_val - $next_val - 1);
     }
+
+    public function test_sorted_by_date()
+    {
+        $p = User::orderBy('datetime', 'asc')->cursorPaginate(10, ['*'], [
+            'identifier' => 'datetime',
+            'path'       => '/',
+        ]);
+
+        $this->assertAttributeEquals(true, 'date_identifier', $p);
+
+        $this->assertGreaterThanOrEqual(strtotime('last month'), $p->prevCursor());
+        $this->assertLessThanOrEqual(strtotime('now'), $p->prevCursor());
+        $this->assertGreaterThanOrEqual(strtotime('last month'), $p->nextCursor());
+        $this->assertLessThanOrEqual(strtotime('now'), $p->nextCursor());
+    }
+
+    public function test_sorted_by_date_on_query()
+    {
+        $p = \DB::table('users')
+            ->orderBy('datetime', 'asc')
+            ->cursorPaginate(10, ['*'], [
+                'identifier'      => 'datetime',
+                'date_identifier' => true,
+                'path'            => '/',
+            ]);
+
+        $this->assertAttributeEquals(true, 'date_identifier', $p);
+        $this->assertGreaterThanOrEqual(strtotime('last month'), $p->prevCursor());
+        $this->assertLessThanOrEqual(strtotime('now'), $p->prevCursor());
+        $this->assertGreaterThanOrEqual(strtotime('last month'), $p->nextCursor());
+        $this->assertLessThanOrEqual(strtotime('now'), $p->nextCursor());
+    }
+
+    public function test_sorted_by_date_auto_identifier()
+    {
+        $p = User::orderBy('datetime', 'asc')->cursorPaginate(10, ['*'], ['path' => '/']);
+
+        $this->assertAttributeEquals('datetime', 'identifier', $p);
+        $this->assertAttributeEquals(true, 'date_identifier', $p);
+        $this->assertGreaterThanOrEqual(strtotime('last month'), $p->prevCursor());
+        $this->assertLessThanOrEqual(strtotime('now'), $p->prevCursor());
+        $this->assertGreaterThanOrEqual(strtotime('last month'), $p->nextCursor());
+        $this->assertLessThanOrEqual(strtotime('now'), $p->nextCursor());
+    }
 }
