@@ -12,6 +12,7 @@ use Illuminate\Pagination\AbstractPaginator;
 use Illuminate\Support\Collection;
 use IteratorAggregate;
 use JsonSerializable;
+use Illuminate\Support\HtmlString;
 
 class CursorPaginator extends AbstractPaginator implements Arrayable, ArrayAccess, Countable, IteratorAggregate, JsonSerializable, Jsonable, PaginatorContract
 {
@@ -305,8 +306,11 @@ class CursorPaginator extends AbstractPaginator implements Arrayable, ArrayAcces
      */
     public function render($view = null, $data = [])
     {
-        // No render method
-        return '';
+        return new HtmlString(
+            static::viewFactory()->make($view ?: static::$defaultSimpleView, array_merge($data, [
+                'paginator' => $this,
+            ]))->render()
+        );
     }
 
     /**
