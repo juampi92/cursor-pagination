@@ -74,7 +74,6 @@ class CursorPaginationServiceProvider extends ServiceProvider
                 $options['date_identifier'] = $this->model->hasCast($options['identifier'], ['datetime', 'date']);
             }
 
-
             // Resolve the cursor by using the request query params
             $cursor = CursorPaginator::resolveCurrentCursor($options['request']);
 
