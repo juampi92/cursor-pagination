@@ -167,8 +167,6 @@ class RequestTest extends ModelsTestCase
 
         $response = $this->get("/test/inverse?$next_name=$next_cur");
 
-        //dd(json_decode($response->getOriginalContent()));
-
         $response->assertJsonFragment([$prev_name => null]);
         $response->assertJsonFragment([$next_name => (string) ($next_cur - 5)]);
         $response->assertJsonFragment(['per_page' => config('cursor_pagination.per_page')]);

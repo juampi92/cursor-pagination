@@ -66,25 +66,32 @@ class CursorPaginationServiceProvider extends ServiceProvider
                 $identifier_sort = $query_orders->firstWhere('column', $options['identifier']);
             }
 
-            if (!isset($options['date_identifier']) && isset($this->model)) {
-                $options['date_identifier'] = $this->model->hasCast($options['identifier'], ['datetime', 'date']);
-            }
-
             if (!isset($options['request'])) {
                 $options['request'] = request();
             }
 
+            if (!isset($options['date_identifier']) && isset($this->model)) {
+                $options['date_identifier'] = $this->model->hasCast($options['identifier'], ['datetime', 'date']);
+            }
+
+
             // Resolve the cursor by using the request query params
             $cursor = CursorPaginator::resolveCurrentCursor($options['request']);
+
+            if (isset($options['date_identifier']) && $options['date_identifier']) {
+                // Also check that the database does not contain unix dates.
+                $not_using_unix = !(isset($options['date_unix']) && $options['date_unix']);
+                $cursor->setDateIdentifier($not_using_unix);
+            }
 
             // If there's a sorting by the identifier, check if it's desc so the cursor is inverted
             $identifier_sort_inverted = $identifier_sort ? $identifier_sort['direction'] === 'desc' : false;
 
             if ($cursor->isPrev()) {
-                $this->where($options['identifier'], $identifier_sort_inverted ? '>' : '<', $cursor->getPrevCursor());
+                $this->where($options['identifier'], $identifier_sort_inverted ? '>' : '<', $cursor->getPrevQuery());
             }
             if ($cursor->isNext()) {
-                $this->where($options['identifier'], $identifier_sort_inverted ? '<' : '>', $cursor->getNextCursor());
+                $this->where($options['identifier'], $identifier_sort_inverted ? '<' : '>', $cursor->getNextQuery());
             }
 
             // Use configs perPage if it's not defined

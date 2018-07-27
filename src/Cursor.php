@@ -6,6 +6,7 @@ class Cursor
 {
     protected $prev = null;
     protected $next = null;
+    protected $date_identifier = false;
 
     /**
      * Cursor constructor.
@@ -17,6 +18,14 @@ class Cursor
     {
         $this->prev = $prev;
         $this->next = $next;
+    }
+
+    /**
+     * @param bool $value
+     */
+    public function setDateIdentifier($value = true)
+    {
+        $this->date_identifier = $value;
     }
 
     /**
@@ -57,5 +66,33 @@ class Cursor
     public function getNextCursor()
     {
         return $this->next;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPrevQuery()
+    {
+        $prev = $this->getPrevCursor();
+
+        if ($this->date_identifier && is_numeric($prev)) {
+            return date('c', $prev);
+        }
+
+        return $prev;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getNextQuery()
+    {
+        $next = $this->getNextCursor();
+
+        if ($this->date_identifier && is_numeric($next)) {
+            return date('c', $next);
+        }
+
+        return $next;
     }
 }
