@@ -283,9 +283,10 @@ Using `null` defaults to camelCase.
 ````php
 new CursorPaginator(array|collection $items, array|int $perPage, array options = [
     // Attribute used for choosing the cursor. Used primaryKey on Eloquent Models as default.
-    'identifier'      => 'id',
-    'date_identifier' => false,
-    'path'            => request()->path(),
+    'identifier'       => 'id',
+    'identifier_alias' => 'id',
+    'date_identifier'  => false,
+    'path'             => request()->path(),
 ]);
 ````
 
@@ -310,6 +311,26 @@ cursorPaginate(array|int $perPage, array $cols = ['*'], array options = []): Cur
  ````
   
  Note: all cursors are casted as strings.
+
+### Identifier Alias
+
+Sometimes we need to use the paginator on a JOIN query. This might have duplicated columns, so we have to specify one for the sorting.
+Since Mysql doesn't allow us to use a selector alias on a WHERE condition, we have to use the `table`.`column` name instead.
+
+```php
+$following = $user->following()
+    ->orderBy('follows.created_at', 'desc')
+    ->cursorPaginate(10, ['*'], [
+        'date_identifier' => true,
+        'identifier' => 'follows.created_at',
+        'identifier_alias' => 'created_at',
+    ]);
+```
+
+By default, the package will guess that the `identifier_alias` is the column name you specify,
+so if you order by `follows.created_at`, it will try to use the models `created_at` as identifier (by using the alias).
+
+
 
 ## Testing
 

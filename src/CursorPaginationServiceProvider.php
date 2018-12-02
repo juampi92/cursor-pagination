@@ -17,7 +17,7 @@ class CursorPaginationServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__.'/../config/cursor_pagination.php' => config_path('cursor_pagination.php'),
+                __DIR__ . '/../config/cursor_pagination.php' => config_path('cursor_pagination.php'),
             ], 'config');
         }
 
@@ -31,7 +31,7 @@ class CursorPaginationServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->mergeConfigFrom(__DIR__.'/../config/cursor_pagination.php', 'cursor_pagination');
+        $this->mergeConfigFrom(__DIR__ . '/../config/cursor_pagination.php', 'cursor_pagination');
     }
 
     /**
@@ -40,7 +40,7 @@ class CursorPaginationServiceProvider extends ServiceProvider
     public function registerMacro()
     {
         /**
-         * @param null  $perPage default=null
+         * @param null $perPage default=null
          * @param array $columns default=['*']
          * @param array $options
          *
@@ -70,8 +70,22 @@ class CursorPaginationServiceProvider extends ServiceProvider
                 $options['request'] = request();
             }
 
+            // The identifier_alias is attribute on the model used.
+            // This should be the name of the Query Select column.
+            if (!isset($options['identifier_alias'])) {
+                // If no identifier_alias is defined, we define it by parsing
+                // the identifier and striping any table names, leaving only
+                // the column name. `following.created_at` will be `created_at`.
+                $identifierName = last(explode('.', $options['identifier']));
+                $options['identifier_alias'] = $identifierName;
+            }
+
+            // If there's no date_identifier option, and the query is
+            // built in a Model, we can check if the model has a datetime
+            // or date cast on the `identifier_alias`, and guess if it's
+            // a datetime identifier or not.
             if (!isset($options['date_identifier']) && isset($this->model)) {
-                $options['date_identifier'] = $this->model->hasCast($options['identifier'], ['datetime', 'date']);
+                $options['date_identifier'] = $this->model->hasCast($options['identifier_alias'], ['datetime', 'date']);
             }
 
             // Resolve the cursor by using the request query params

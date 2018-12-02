@@ -9,6 +9,7 @@ use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\AbstractPaginator;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use IteratorAggregate;
 use JsonSerializable;
@@ -53,7 +54,7 @@ class CursorPaginator extends AbstractPaginator implements Arrayable, ArrayAcces
      * Create a new paginator instance.
      *
      * @param mixed $items
-     * @param int   $perPage
+     * @param int $perPage
      * @param array $options
      */
     public function __construct($items, $perPage, array $options = [])
@@ -230,9 +231,9 @@ class CursorPaginator extends AbstractPaginator implements Arrayable, ArrayAcces
         $query = array_merge($this->query, $cursor);
 
         return $this->path
-            .(str_contains($this->path, '?') ? '&' : '?')
-            .http_build_query($query, '', '&')
-            .$this->buildFragment();
+            . (str_contains($this->path, '?') ? '&' : '?')
+            . http_build_query($query, '', '&')
+            . $this->buildFragment();
     }
 
     /**
@@ -288,18 +289,37 @@ class CursorPaginator extends AbstractPaginator implements Arrayable, ArrayAcces
 
         $id = $model->{$this->identifier};
 
-        if (!$this->date_identifier) {
+        if (!$this->isDateIdentifier($id)) {
             return $id;
         }
 
-        return (is_string($id)) ? strtotime($id) : $id->timestamp;
+        return $this->parseDateIdentifier($id);
+    }
+
+    /**
+     * @param $id
+     * @return int
+     */
+    protected function parseDateIdentifier($id): int
+    {
+        return Carbon::parse($id)->timestamp;
+    }
+
+    /**
+     * Will check if the identifier is type date.
+     * @param $id
+     * @return bool
+     */
+    protected function isDateIdentifier($id): bool
+    {
+        return $this->date_identifier || $id instanceof Carbon;
     }
 
     /**
      * Render the paginator using a given view.
      *
      * @param string|null $view
-     * @param array       $data
+     * @param array $data
      *
      * @return string
      */
@@ -319,11 +339,11 @@ class CursorPaginator extends AbstractPaginator implements Arrayable, ArrayAcces
         list($prev, $next) = $this->getCursorQueryNames();
 
         return [
-            'data'          => $this->items->toArray(),
-            'path'          => $this->url(),
-            $prev           => self::castCursor($this->prevCursor()),
-            $next           => self::castCursor($this->nextCursor()),
-            'per_page'      => (int) $this->perPage(),
+            'data' => $this->items->toArray(),
+            'path' => $this->url(),
+            $prev => self::castCursor($this->prevCursor()),
+            $next => self::castCursor($this->nextCursor()),
+            'per_page' => (int)$this->perPage(),
             'next_page_url' => $this->nextPageUrl(),
             'prev_page_url' => $this->previousPageUrl(),
         ];
@@ -362,6 +382,6 @@ class CursorPaginator extends AbstractPaginator implements Arrayable, ArrayAcces
             return $val;
         }
 
-        return (string) $val;
+        return (string)$val;
     }
 }
