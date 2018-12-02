@@ -287,13 +287,18 @@ class CursorPaginator extends AbstractPaginator implements Arrayable, ArrayAcces
             return;
         }
 
-        $id = $model->{$this->identifier_alias};
+        $id = $model->{$this->getIdentifierName()};
 
         if (!$this->isDateIdentifier($id)) {
             return $id;
         }
 
         return $this->parseDateIdentifier($id);
+    }
+
+    protected function getIdentifierName(): string
+    {
+        return $this->identifier_alias ?? $this->identifier;
     }
 
     /**
