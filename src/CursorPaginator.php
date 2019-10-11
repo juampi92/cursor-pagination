@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Pagination\AbstractPaginator;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 use IteratorAggregate;
 use JsonSerializable;
 
@@ -134,7 +135,8 @@ class CursorPaginator extends AbstractPaginator implements Arrayable, ArrayAcces
         $transform_name = config('cursor_pagination.transform_name', null);
 
         if (!is_null($transform_name)) {
-            return call_user_func($transform_name, $name);
+            $str_method = Str::replaceLast('_case', '', $transform_name);
+            return Str::$str_method($name);
         }
 
         return $name;
@@ -231,7 +233,7 @@ class CursorPaginator extends AbstractPaginator implements Arrayable, ArrayAcces
         $query = array_merge($this->query, $cursor);
 
         return $this->path
-            . (str_contains($this->path, '?') ? '&' : '?')
+            . (Str::contains($this->path, '?') ? '&' : '?')
             . http_build_query($query, '', '&')
             . $this->buildFragment();
     }
