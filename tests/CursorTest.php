@@ -39,7 +39,7 @@ class CursorTest extends TestCase
 
         $cursor = CursorPaginator::resolveCurrentCursor($req);
 
-        $this->assertAttributeEquals($val, 'prev', $cursor, 'Cursor\'s nav should be prev');
+        $this->assertEquals($val, $cursor->getPrevCursor(), 'Cursor\'s nav should be prev');
         $this->assertFalse($cursor->isNext(), 'is not next');
         $this->assertTrue($cursor->isPrev(), 'is prev');
         $this->assertTrue($cursor->isPresent(), 'is present');
@@ -58,7 +58,7 @@ class CursorTest extends TestCase
 
         $cursor = CursorPaginator::resolveCurrentCursor($req);
 
-        $this->assertAttributeEquals($val, 'next', $cursor, "Cursor's value should be $val");
+        $this->assertEquals($val, $cursor->getNextCursor(), "Cursor's value should be $val");
         $this->assertTrue($cursor->isNext(), 'is next');
         $this->assertTrue(!$cursor->isPrev(), 'is not prev');
         $this->assertTrue($cursor->isPresent(), 'is present');
@@ -78,8 +78,8 @@ class CursorTest extends TestCase
 
         $cursor = CursorPaginator::resolveCurrentCursor($req);
 
-        $this->assertAttributeEquals($prev_val, 'prev', $cursor);
-        $this->assertAttributeEquals($next_val, 'next', $cursor);
+        $this->assertEquals($prev_val, $cursor->getPrevCursor());
+        $this->assertEquals($next_val, $cursor->getNextCursor());
         $this->assertTrue($cursor->isNext(), 'is next');
         $this->assertTrue($cursor->isPrev(), 'is prev');
     }
