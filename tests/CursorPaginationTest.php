@@ -12,7 +12,7 @@ class CursorPaginationTest extends TestCase
             ['id' => 1], ['id' => 2], ['id' => 3], ['id' => 4], ['id' => 5],
         ], $perPage = 2);
 
-        $this->assertAttributeEquals($perPage, 'perPage', $p);
+        $this->assertEquals($perPage, $p->perPage());
     }
 
     public function test_overflow_pagination()

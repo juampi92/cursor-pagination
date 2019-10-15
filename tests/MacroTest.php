@@ -58,7 +58,7 @@ class MacroTest extends ModelsTestCase
             'path'    => '/',
         ]);
 
-        $this->assertAttributeEquals($prev_count, 'perPage', $p);
+        $this->assertEquals($prev_count, $p->perPage());
         $this->assertEquals(count($p->toArray()['data']), $prev_count);
     }
 
@@ -71,7 +71,7 @@ class MacroTest extends ModelsTestCase
             'path'    => '/',
         ]);
 
-        $this->assertAttributeEquals($next_count, 'perPage', $p);
+        $this->assertEquals($next_count, $p->perPage());
         $this->assertEquals(count($p->toArray()['data']), $next_count);
     }
 
@@ -86,7 +86,7 @@ class MacroTest extends ModelsTestCase
             'path'    => '/',
         ]);
 
-        $this->assertAttributeEquals($next_count, 'perPage', $p);
+        $this->assertEquals($next_count, $p->perPage());
         $this->assertEquals(count($p->toArray()['data']), $next_count);
     }
 
@@ -112,8 +112,6 @@ class MacroTest extends ModelsTestCase
             'path'       => '/',
         ]);
 
-        $this->assertAttributeEquals(true, 'date_identifier', $p);
-
         $this->assertGreaterThanOrEqual(strtotime('last month'), $p->prevCursor());
         $this->assertLessThanOrEqual(strtotime('now'), $p->prevCursor());
         $this->assertGreaterThanOrEqual(strtotime('last month'), $p->nextCursor());
@@ -130,7 +128,6 @@ class MacroTest extends ModelsTestCase
                 'path'            => '/',
             ]);
 
-        $this->assertAttributeEquals(true, 'date_identifier', $p);
         $this->assertGreaterThanOrEqual(strtotime('last month'), $p->prevCursor());
         $this->assertLessThanOrEqual(strtotime('now'), $p->prevCursor());
         $this->assertGreaterThanOrEqual(strtotime('last month'), $p->nextCursor());
@@ -141,8 +138,6 @@ class MacroTest extends ModelsTestCase
     {
         $p = User::orderBy('datetime', 'asc')->cursorPaginate(10, ['*'], ['path' => '/']);
 
-        $this->assertAttributeEquals('datetime', 'identifier', $p);
-        $this->assertAttributeEquals(true, 'date_identifier', $p);
         $this->assertGreaterThanOrEqual(strtotime('last month'), $p->prevCursor());
         $this->assertLessThanOrEqual(strtotime('now'), $p->prevCursor());
         $this->assertGreaterThanOrEqual(strtotime('last month'), $p->nextCursor());

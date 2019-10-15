@@ -8,7 +8,7 @@ use Juampi92\CursorPagination\Tests\Fixtures\Models\User;
 
 class ModelsTestCase extends TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         // Reset config on each request
