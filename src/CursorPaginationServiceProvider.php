@@ -101,10 +101,10 @@ class CursorPaginationServiceProvider extends ServiceProvider
             $identifier_sort_inverted = $identifier_sort ? $identifier_sort['direction'] === 'desc' : false;
 
             if ($cursor->isPrev()) {
-                $this->where($options['identifier'], $identifier_sort_inverted ? '>' : '<', $cursor->getPrevQuery());
+                $this->having($options['identifier'], $identifier_sort_inverted ? '>' : '<', $cursor->getPrevQuery());
             }
             if ($cursor->isNext()) {
-                $this->where($options['identifier'], $identifier_sort_inverted ? '<' : '>', $cursor->getNextQuery());
+                $this->having($options['identifier'], $identifier_sort_inverted ? '<' : '>', $cursor->getNextQuery());
             }
 
             // Use configs perPage if it's not defined
