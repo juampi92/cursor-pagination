@@ -95,6 +95,16 @@ class CursorPaginator extends AbstractPaginator implements Arrayable, ArrayAcces
     }
 
     /**
+     * Get the items of the paginator.
+     *
+     * @return mixed $items
+     */
+    protected function getItems($items)
+    {
+        return $this->items;
+    }
+
+    /**
      * @param Request|null $request
      *
      * @return Cursor
