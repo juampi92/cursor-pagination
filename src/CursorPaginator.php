@@ -99,7 +99,7 @@ class CursorPaginator extends AbstractPaginator implements Arrayable, ArrayAcces
      *
      * @return mixed $items
      */
-    public function getItems($items)
+    public function getItems()
     {
         return $this->items;
     }
