@@ -55,7 +55,7 @@ class CursorPaginator extends AbstractPaginator implements Arrayable, ArrayAcces
      * Create a new paginator instance.
      *
      * @param mixed $items
-     * @param int $perPage
+     * @param int   $perPage
      * @param array $options
      */
     public function __construct($items, $perPage, array $options = [])
@@ -239,9 +239,9 @@ class CursorPaginator extends AbstractPaginator implements Arrayable, ArrayAcces
         $query = array_merge($this->query, $cursor);
 
         return $this->path
-            . (Str::contains($this->path, '?') ? '&' : '?')
-            . http_build_query($query, '', '&')
-            . $this->buildFragment();
+            .(Str::contains($this->path, '?') ? '&' : '?')
+            .http_build_query($query, '', '&')
+            .$this->buildFragment();
     }
 
     /**
@@ -335,7 +335,7 @@ class CursorPaginator extends AbstractPaginator implements Arrayable, ArrayAcces
      * Render the paginator using a given view.
      *
      * @param string|null $view
-     * @param array $data
+     * @param array       $data
      *
      * @return string
      */
@@ -355,11 +355,11 @@ class CursorPaginator extends AbstractPaginator implements Arrayable, ArrayAcces
         list($prev, $next) = $this->getCursorQueryNames();
 
         return [
-            'data' => $this->items->toArray(),
-            'path' => $this->url(),
-            $prev => self::castCursor($this->prevCursor()),
-            $next => self::castCursor($this->nextCursor()),
-            'per_page' => (int)$this->perPage(),
+            'data'          => $this->items->toArray(),
+            'path'          => $this->url(),
+            $prev           => self::castCursor($this->prevCursor()),
+            $next           => self::castCursor($this->nextCursor()),
+            'per_page'      => (int) $this->perPage(),
             'next_page_url' => $this->nextPageUrl(),
             'prev_page_url' => $this->previousPageUrl(),
         ];
@@ -398,6 +398,6 @@ class CursorPaginator extends AbstractPaginator implements Arrayable, ArrayAcces
             return $val;
         }
 
-        return (string)$val;
+        return (string) $val;
     }
 }
