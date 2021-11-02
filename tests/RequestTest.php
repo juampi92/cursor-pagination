@@ -138,24 +138,26 @@ class RequestTest extends ModelsTestCase
 
         $response = $this->get("/test/resource?$prev_name=$prev_cur&$next_name=$next_cur");
 
+        $data = json_decode($response->getOriginalContent())->data;
+        $ids = collect($data)->pluck('_id')->all();
+        $latest_id = collect($data)->pluck('_id')->last();
+
         $response->assertJsonFragment(['links' => [
             'first' => null,
             'last'  => null,
             'prev'  => null,
-            'next'  => null,
+            'next'  => "test/resource?$next_name=$latest_id&$prev_name=$prev_cur",
         ]]);
 
         $response->assertJsonFragment([
             'meta' => [
                 'path'            => 'test/resource?',
-                'next_cursor'     => null,
+                'next_cursor'     => "$latest_id",
                 'per_page'        => 5,
                 'previous_cursor' => null,
             ],
         ]);
 
-        $data = json_decode($response->getOriginalContent())->data;
-        $ids = collect($data)->pluck('_id')->all();
         $this->assertEquals($ids, range($next_cur + 1, min($next_cur + 5, $prev_cur - 1)));
     }
 

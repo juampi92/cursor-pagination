@@ -157,7 +157,12 @@ class CursorPaginator extends AbstractPaginator implements Arrayable, ArrayAcces
 
     public function nextCursor()
     {
-        return $this->hasMorePages() ? $this->lastItem() : null;
+        if ($this->hasMorePages()) {
+            return $this->lastItem();
+        }
+
+        list(, $next_name) = self::cursorQueryNames();
+        return $this->lastItem() ?? $this->request->get($next_name);
     }
 
     /**
