@@ -10,12 +10,12 @@ class UrlDetectionTest extends TestCase
     public function test_resolves_urls_on_no_cursor()
     {
         $p = new CursorPaginator($array = [
-            (object) ['id' => 1],
-            (object) ['id' => 2],
-            (object) ['id' => 3],
+            (object)['id' => 1],
+            (object)['id' => 2],
+            (object)['id' => 3],
         ], $perPage = 2, [
             'request' => new Request(),
-            'path'    => $path = 'api',
+            'path' => $path = 'api',
         ]);
 
         $firstId = $array[0]->id;
@@ -35,14 +35,14 @@ class UrlDetectionTest extends TestCase
         list(, $next_name) = CursorPaginator::cursorQueryNames();
 
         $p = new CursorPaginator($array = [
-            (object) ['id' => 2],
-            (object) ['id' => 3],
-            (object) ['id' => 4],
+            (object)['id' => 2],
+            (object)['id' => 3],
+            (object)['id' => 4],
         ], $perPage = 2, [
             'request' => new Request([
                 $next_name => 1,
             ]),
-            'path'    => $path = 'api',
+            'path' => $path = 'api',
         ]);
 
         $lastId = $array[$perPage - 1]->id;
@@ -59,15 +59,15 @@ class UrlDetectionTest extends TestCase
         list(, $next_name) = CursorPaginator::cursorQueryNames();
 
         $p = new CursorPaginator($array = [
-            (object) ['id' => 2],
-            (object) ['id' => 3],
-            (object) ['id' => 4],
+            (object)['id' => 2],
+            (object)['id' => 3],
+            (object)['id' => 4],
         ], $perPage = 2, [
             'request' => new Request([
-                'a'        => 'b',
+                'a' => 'b',
                 $next_name => 1,
             ]),
-            'path'    => $path = 'api',
+            'path' => $path = 'api',
         ]);
 
         $lastId = $array[$perPage - 1]->id;
@@ -83,7 +83,7 @@ class UrlDetectionTest extends TestCase
             'request' => new Request([
                 $prev_name => $prev_query = 1,
             ]),
-            'path'    => $path = 'api',
+            'path' => $path = 'api',
         ]);
 
         $this->assertEquals($p->previousPageUrl(), "$path?$prev_name=$prev_query");
@@ -94,18 +94,18 @@ class UrlDetectionTest extends TestCase
         list(, $next_name) = CursorPaginator::cursorQueryNames();
 
         $p = new CursorPaginator($array = [
-            (object) ['id' => 98],
-            (object) ['id' => 99],
+            (object)['id' => 98],
+            (object)['id' => 99],
         ], $perPage = 2, [
             'request' => new Request([
                 $next_name => $next_query = 97,
             ]),
-            'path'    => $path = 'api',
+            'path' => $path = 'api',
         ]);
 
         $this->assertNotTrue($p->hasMorePages());
-        $this->assertEquals( "$path?$next_name=99",$p->nextPageUrl());
-        $this->assertEquals( null,$p->previousPageUrl());
+        $this->assertEquals("$path?$next_name=99", $p->nextPageUrl());
+        $this->assertEquals(null, $p->previousPageUrl());
     }
 
     public function test_different_identifier()
@@ -113,11 +113,11 @@ class UrlDetectionTest extends TestCase
         CursorPaginator::cursorQueryNames();
 
         $p = new CursorPaginator($array = [
-            (object) ['id' => 98, '_id' => 1],
-            (object) ['id' => 99, '_id' => 2],
-            (object) ['id' => 100, '_id' => 3],
+            (object)['id' => 98, '_id' => 1],
+            (object)['id' => 99, '_id' => 2],
+            (object)['id' => 100, '_id' => 3],
         ], $perPage = 2, [
-            'request'    => new Request(),
+            'request' => new Request(),
             'identifier' => '_id',
         ]);
 
