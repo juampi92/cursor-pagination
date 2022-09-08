@@ -1,9 +1,14 @@
+
 # Cursor Pagination for Laravel
 [![Latest Version](https://img.shields.io/github/release/juampi92/cursor-pagination.svg?style=flat-square)](https://github.com/juampi92/cursor-pagination/releases)
 [![Build Status](https://img.shields.io/travis/juampi92/cursor-pagination/master.svg?style=flat-square)](https://travis-ci.org/juampi92/cursor-pagination)
 [![StyleCI](https://styleci.io/repos/122583097/shield?branch=master)](https://styleci.io/repos/122583097)
 [![Total Downloads](https://img.shields.io/packagist/dt/juampi92/cursor-pagination.svg?style=flat-square)](https://packagist.org/packages/juampi92/cursor-pagination)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
+
+**⚠️ Cursor pagination is archived.** This is because [cursor pagination](https://laravel.com/docs/pagination#cursor-pagination) is built into Laravel out of the box so is no longer needed. We recommend that you use the native package, or if you must, fork this one.
+
+----
 
 This package provides a cursor based pagination already integrated with Laravel's [query builder](https://laravel.com/docs/master/queries) and [Eloquent ORM](https://laravel.com/docs/master/eloquent).
 It calculates the SQL query limits automatically by checking the requests GET parameters, and automatically builds
