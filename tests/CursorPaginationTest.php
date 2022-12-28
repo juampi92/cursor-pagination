@@ -40,7 +40,7 @@ class CursorPaginationTest extends TestCase
         $this->assertEquals($p->prevCursor(), 1);
     }
 
-    public function test_empty_next_if_no_more()
+    public function test_returns_last_cursor_as_next_if_no_more()
     {
         $p = new CursorPaginator($array = [
             (object) ['id' => 1],
@@ -48,6 +48,6 @@ class CursorPaginationTest extends TestCase
             (object) ['id' => 3],
         ], $perPage = 3);
 
-        $this->assertEquals($p->nextCursor(), null);
+        $this->assertEquals(3, $p->nextCursor());
     }
 }

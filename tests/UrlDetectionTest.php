@@ -89,7 +89,7 @@ class UrlDetectionTest extends TestCase
         $this->assertEquals($p->previousPageUrl(), "$path?$prev_name=$prev_query");
     }
 
-    public function test_stops_when_no_more_items()
+    public function test_returns_last_cursor_when_no_more_items()
     {
         list(, $next_name) = CursorPaginator::cursorQueryNames();
 
@@ -104,8 +104,8 @@ class UrlDetectionTest extends TestCase
         ]);
 
         $this->assertNotTrue($p->hasMorePages());
-        $this->assertEquals($p->nextPageUrl(), null);
-        $this->assertEquals($p->previousPageUrl(), null);
+        $this->assertEquals("$path?$next_name=99", $p->nextPageUrl());
+        $this->assertEquals(null, $p->previousPageUrl());
     }
 
     public function test_different_identifier()
